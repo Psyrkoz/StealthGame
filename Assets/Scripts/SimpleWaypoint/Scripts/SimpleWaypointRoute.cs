@@ -9,45 +9,102 @@ namespace SimpleWaypoint
 		#region VARIABLE DECLARATION
 
 		public Color color;
-		private LinkedList<GameObject> waypoints = new LinkedList<GameObject>();
-        
+
+		[SerializeField]
+		private bool isCircular;
+		private List<SimpleWaypoint> waypoints = new List<SimpleWaypoint>();
+
 		#endregion
 
-        public void Start()
+		public void Start()
 		{
-			loadWaypoints();
+			waypoints.Clear();
+			loadRoute(waypoints);
+
+			Debug.Log("Loading route " + name);
+			foreach (SimpleWaypoint waypoint in waypoints)
+				waypoint.debugLog();
 		}
 
-		private void loadWaypoints()
+		// TODO: Add circular functionallity (and probably refactor a bit)
+		private void loadRoute(List<SimpleWaypoint> waypoints, SimpleWaypoint parent = null)
         {
-			waypoints.Clear();
-
-			SimpleWaypoint[] waypointArray = GetComponentsInChildren<SimpleWaypoint>();
-			if(waypointArray.Length > 0)
-            {
-				waypoints.AddFirst(waypointArray[0].gameObject);
-				for(int i = 1; i < waypointArray.Length - 1; i++)
-                {
-					waypoints.AddAfter(waypoints.Last, waypointArray[i].gameObject);
-                }
+			if (transform.childCount < 2)
+			{
+				Debug.LogWarning("A route is less than 2 waypoints");
+				return;
 			}
-        }
+
+			// Parent is null but getting the 
+			if(parent == null)
+            {
+				parent = GetComponentInParent<SimpleWaypoint>();
+			}
+
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				SimpleWaypoint waypoint = transform.GetChild(i).GetComponent<SimpleWaypoint>();
+
+				if(parent != null && i == 0)
+                {
+					waypoint.addPossibleWaypoints(parent);
+					parent.addPossibleWaypoints(waypoint);
+					waypoints.Add(parent);
+                }
+
+				// Add previous and following child to path
+				if(i - 1 >= 0)
+                {
+					SimpleWaypoint possibility = transform.GetChild(i - 1).GetComponent<SimpleWaypoint>();
+					waypoint.addPossibleWaypoints(possibility);
+				}
+				if(i + 1 < transform.childCount)
+                {
+					SimpleWaypoint possibility = transform.GetChild(i + 1).GetComponent<SimpleWaypoint>();
+					waypoint.addPossibleWaypoints(possibility);
+				}
+
+				// For each sub route, add first element
+				for(int j = 0; j < waypoint.transform.childCount; j++)
+                {
+					SimpleWaypointRoute route = waypoint.transform.GetChild(j).GetComponent<SimpleWaypointRoute>();
+					route.loadRoute(waypoints, waypoint);
+                }
+
+				waypoints.Add(waypoint);
+			}
+		}
 
 		// Used for editor only
 		void OnDrawGizmos ()
 		{
-			SimpleWaypoint[] waypoints = GetComponentsInChildren<SimpleWaypoint>();
-			SimpleWaypointManager manager = transform.parent.GetComponent<SimpleWaypointManager>();
+			// For some reasons, have to reverse the loop so in a non circular route, 
+			// the last waypoint is the farthest from beginning and not the closest
+			List<SimpleWaypoint> waypoints = new List<SimpleWaypoint>();
+			for(int i = transform.childCount - 1; i >= 0 ; i--)
+			{
+				waypoints.Add(transform.GetChild(i).GetComponent<SimpleWaypoint>());
+            }
 
-			// Mandatory to use new Color(r, g, b) since a is at 0
-			Gizmos.color = new Color(color.r, color.g, color.b);
-			if (manager != null && manager.drawGizmos && waypoints.Length > 1)
+			// If the route parent is a SimpleWaypoint, add it to the route
+			if(transform.parent.GetComponent<SimpleWaypoint>() != null)
+				waypoints.Add(transform.parent.GetComponent<SimpleWaypoint>());
+
+
+			SimpleWaypointManager manager = FindObjectOfType<SimpleWaypointManager>();
+			Gizmos.color = new Color(color.r, color.g, color.b); // Mandatory to use new Color(r, g, b) since a is at 0
+			if (manager != null && manager.drawGizmos && waypoints.Count > 1)
             {
-				for (int i = 0; i < waypoints.Length - 1; i++)
+				for (int i = 0; i < waypoints.Count - 1; i++)
                 {
 					Gizmos.DrawLine(waypoints[i].transform.position, waypoints[i + 1].transform.position);
 				}
-				Gizmos.DrawLine(waypoints[waypoints.Length - 1].transform.position, waypoints[0].transform.position);
+
+				// Closing the circuit
+				if (isCircular)
+				{
+					Gizmos.DrawLine(waypoints[waypoints.Count - 1].transform.position, waypoints[0].transform.position);
+				}
             }
 		}
 	}

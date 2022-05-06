@@ -27,7 +27,7 @@ namespace SimpleWaypoint
             }
 
 			// Generate a new waypoint on the route
-			if (GUILayout.Button("Add New Waypoint")) 
+			if (GUILayout.Button("Add new waypoint")) 
 			{
 				Shader shader = Shader.Find("Universal Render Pipeline/Simple Lit");
 				Material mat = new Material(shader);
@@ -36,7 +36,7 @@ namespace SimpleWaypoint
 				GameObject waypoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 				waypoint.transform.SetParent(route.transform);
 				waypoint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-				waypoint.transform.localPosition = new Vector3(Random.Range(-10f, 10f), route.transform.localScale.y, Random.Range(-10f, 10f));
+				waypoint.transform.localPosition = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
 				waypoint.name = "Waypoint";
 				waypoint.tag = "EditorOnly";
 

@@ -23,7 +23,24 @@ namespace SimpleWaypoint
                     {
                         waypoint.transform.position = groundHit.point;
                     }
+                }
+            }
 
+            // Only showing on single selection
+            if(targets.Length == 1)
+            {
+                if (GUILayout.Button("Create a route"))
+                {
+                    SimpleWaypoint waypoint = targets[0] as SimpleWaypoint;
+                    GameObject gameObject = new GameObject();
+
+                    gameObject.transform.SetParent(waypoint.transform);
+                    gameObject.name = "Route";
+                    gameObject.tag = "EditorOnly";
+                    gameObject.transform.localPosition = Vector3.zero;
+
+                    SimpleWaypointRoute route = gameObject.AddComponent<SimpleWaypointRoute>();
+                    route.color = waypoint.GetComponent<Renderer>().sharedMaterial.color;
                 }
             }
         }
