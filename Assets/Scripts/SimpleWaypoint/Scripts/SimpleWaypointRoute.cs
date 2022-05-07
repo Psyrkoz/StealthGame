@@ -16,26 +16,20 @@ namespace SimpleWaypoint
 
 		#endregion
 
-		public void Start()
+		public void Awake()
 		{
 			waypoints.Clear();
 			loadRoute(waypoints);
 
+			/*
 			Debug.Log("Loading route " + name);
 			foreach (SimpleWaypoint waypoint in waypoints)
 				waypoint.debugLog();
+			*/
 		}
 
-		// TODO: Add circular functionallity (and probably refactor a bit)
 		private void loadRoute(List<SimpleWaypoint> waypoints, SimpleWaypoint parent = null)
         {
-			if (transform.childCount < 2)
-			{
-				Debug.LogWarning("A route is less than 2 waypoints");
-				return;
-			}
-
-			// Parent is null but getting the 
 			if(parent == null)
             {
 				parent = GetComponentInParent<SimpleWaypoint>();
@@ -49,7 +43,9 @@ namespace SimpleWaypoint
                 {
 					waypoint.addPossibleWaypoints(parent);
 					parent.addPossibleWaypoints(waypoint);
-					waypoints.Add(parent);
+
+					if(!waypoints.Contains(parent))
+						waypoints.Add(parent);
                 }
 
 				// Add previous and following child to path
@@ -71,10 +67,39 @@ namespace SimpleWaypoint
 					route.loadRoute(waypoints, waypoint);
                 }
 
-				waypoints.Add(waypoint);
+				if(!waypoints.Contains(waypoint))
+					waypoints.Add(waypoint);
 			}
+
+			if(isCircular)
+            {
+				if (parent == null)
+				{
+					parent = transform.GetChild(0).GetComponent<SimpleWaypoint>();
+				}
+
+				SimpleWaypoint end = transform.GetChild(transform.childCount - 1).GetComponent<SimpleWaypoint>();
+				parent.addPossibleWaypoints(end);
+				end.addPossibleWaypoints(parent);
+            }
 		}
 
+		public SimpleWaypoint getRandomUntakenWaypoint()
+        {
+			List<SimpleWaypoint> untakenWaypoint = new List<SimpleWaypoint>();
+			foreach (SimpleWaypoint waypoint in waypoints)
+			{
+				if (!waypoint.taken)
+				{
+					untakenWaypoint.Add(waypoint);
+				}
+			}
+
+			if(untakenWaypoint.Count > 0)
+				return untakenWaypoint[Random.Range(0, untakenWaypoint.Count)];
+
+			return null;
+        }
 		// Used for editor only
 		void OnDrawGizmos ()
 		{

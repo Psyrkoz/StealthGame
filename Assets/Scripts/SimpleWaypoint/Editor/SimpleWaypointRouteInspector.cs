@@ -35,7 +35,7 @@ namespace SimpleWaypoint
 
 				GameObject waypoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 				waypoint.transform.SetParent(route.transform);
-				waypoint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+				waypoint.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 				waypoint.transform.localPosition = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
 				waypoint.name = "Waypoint";
 				waypoint.tag = "EditorOnly";

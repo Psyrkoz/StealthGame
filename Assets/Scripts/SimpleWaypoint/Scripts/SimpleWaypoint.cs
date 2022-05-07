@@ -4,31 +4,48 @@ using UnityEngine;
 
 namespace SimpleWaypoint
 {
-	public class SimpleWaypoint : MonoBehaviour
-	{
-        List<SimpleWaypoint> possibleWaypoints;
+    public class SimpleWaypoint : MonoBehaviour
+    {
+        private List<SimpleWaypoint> linkedWaypoints;
+
+        public bool taken = false;
+        public float waitTime = 1.0f;
 
         public void Awake()
         {
-            possibleWaypoints = new List<SimpleWaypoint>();
+            linkedWaypoints = new List<SimpleWaypoint>();
+        }
+
+        public List<SimpleWaypoint> getPossibleNextWaypoints()
+        {
+            List<SimpleWaypoint> possibleWaypoints = new List<SimpleWaypoint>();
+            foreach(SimpleWaypoint waypoint in linkedWaypoints)
+            {
+                if (!waypoint.taken)
+                {
+                    possibleWaypoints.Add(waypoint);
+                }
+            }
+
+            return possibleWaypoints;
         }
 
         public void addPossibleWaypoints(SimpleWaypoint w)
         {
-            if (w != null && !possibleWaypoints.Contains(w))
+            if (w != null && !linkedWaypoints.Contains(w))
             {
-                possibleWaypoints.Add(w);
+                linkedWaypoints.Add(w);
             }
         }
         public bool removePossibleWaypoint(SimpleWaypoint w)
         {
-            return possibleWaypoints.Remove(w);
+            return linkedWaypoints.Remove(w);
         }
 
         public void debugLog()
         {
             string strDebug = gameObject.transform.name  + " --- ";
-            foreach (SimpleWaypoint w in possibleWaypoints)
+            foreach (SimpleWaypoint w in linkedWaypoints)
                 strDebug += w.gameObject.name + ", ";
 
             Debug.Log(strDebug);
