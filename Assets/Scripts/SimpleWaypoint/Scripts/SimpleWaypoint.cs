@@ -8,6 +8,8 @@ namespace SimpleWaypoint
     {
         private List<SimpleWaypoint> linkedWaypoints;
 
+        // TODO: Add a "routeBeginning" boolean value so we can set up a proper spawn point for AI
+        //       and not random. Probably also add a "use random spawn point in manager editor" so its still possible
         public bool accessible = true;
         private bool taken = false;
         public int minWaitTime = 1;

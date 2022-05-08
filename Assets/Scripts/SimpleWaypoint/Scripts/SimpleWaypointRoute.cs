@@ -20,12 +20,6 @@ namespace SimpleWaypoint
 		{
 			waypoints.Clear();
 			loadRoute(waypoints);
-
-			/*
-			Debug.Log("Loading route " + name);
-			foreach (SimpleWaypoint waypoint in waypoints)
-				waypoint.debugLog();
-			*/
 		}
 
 		private void loadRoute(List<SimpleWaypoint> waypoints, SimpleWaypoint parent = null)
