@@ -9,7 +9,8 @@ namespace SimpleWaypoint
         private List<SimpleWaypoint> linkedWaypoints;
 
         public bool taken = false;
-        public float waitTime = 1.0f;
+        public float minWaitTime = 1.0f;
+        public float maxWaitTime = 5.0f;
 
         public void Awake()
         {

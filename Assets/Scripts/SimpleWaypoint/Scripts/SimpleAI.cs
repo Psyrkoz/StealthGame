@@ -31,7 +31,6 @@ namespace SimpleWaypoint
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.transform.position, 1.2f * Time.deltaTime);
             }
         }
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.GetComponent<SimpleWaypoint>())
@@ -41,11 +40,10 @@ namespace SimpleWaypoint
                 {
                     status = STATUS.IDLE;
                     GetComponent<Animator>().SetInteger("Status", 0);
-                    StartCoroutine(doIdleTime(collided.waitTime));
+                    StartCoroutine(doIdleTime(Random.Range(collided.minWaitTime, collided.maxWaitTime)));
                 }
             }
-        }
-        
+        }  
         private IEnumerator doIdleTime(float waitTime)
         {
             yield return new WaitForSeconds(waitTime);
@@ -56,16 +54,15 @@ namespace SimpleWaypoint
         {
             return status;
         }
-        
         public SimpleWaypointRoute getRoute()
         {
             return route;
         }
+       
         public void setRoute(SimpleWaypointRoute newRoute)
         {
             route = newRoute;
         }
-
         public void setNextWaypoint(SimpleWaypoint nextWaypoint)
         {
             if (currentWaypoint != null)
@@ -79,9 +76,6 @@ namespace SimpleWaypoint
 
             status = STATUS.WALKING;
         }
-
-        // SHOUD ONLY BE USED ONCE
-        // TODO: Not using it... maybe ?
         public void setPreviousWaypoint(SimpleWaypoint waypoint)
         {
             previousWaypoint = waypoint;
@@ -91,7 +85,6 @@ namespace SimpleWaypoint
         {
             return currentWaypoint;
         }
-
         public SimpleWaypoint getPreviousWaypoint()
         {
             return previousWaypoint;

@@ -30,7 +30,8 @@ namespace SimpleWaypoint
                 SimpleAI prefab = manager.getPrefab();
                 if(prefab != null)
                 {
-                    SimpleAI instance = Instantiate(prefab, manager.transform);
+                    // Using InstantiatePrefab so its a real prefab and not a clone
+                    SimpleAI instance = PrefabUtility.InstantiatePrefab(prefab, manager.transform) as SimpleAI;
                     instance.setRoute(route);
                 }
             }
