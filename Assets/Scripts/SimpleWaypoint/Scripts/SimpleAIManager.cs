@@ -8,6 +8,9 @@ namespace SimpleWaypoint
     {
         private List<SimpleAI> AI = new List<SimpleAI>();
 
+        [SerializeField]
+        private SimpleAI prefab;
+
         // Find all enemies on the map
         private void Start()
         {
@@ -66,6 +69,11 @@ namespace SimpleWaypoint
                     }   
                 }
             }
+        }
+
+        public SimpleAI getPrefab()
+        {
+            return prefab;
         }
     }
 

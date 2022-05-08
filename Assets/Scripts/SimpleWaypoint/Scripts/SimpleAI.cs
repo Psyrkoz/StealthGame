@@ -56,9 +56,14 @@ namespace SimpleWaypoint
         {
             return status;
         }
+        
         public SimpleWaypointRoute getRoute()
         {
             return route;
+        }
+        public void setRoute(SimpleWaypointRoute newRoute)
+        {
+            route = newRoute;
         }
 
         public void setNextWaypoint(SimpleWaypoint nextWaypoint)
