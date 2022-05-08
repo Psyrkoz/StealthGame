@@ -68,11 +68,11 @@ namespace SimpleWaypoint
             if (currentWaypoint != null)
             {
                 previousWaypoint = currentWaypoint;
-                previousWaypoint.taken = false;
+                previousWaypoint.setTaken(false);
             }
 
             currentWaypoint = nextWaypoint;
-            currentWaypoint.taken = true;
+            currentWaypoint.setTaken(true);
 
             status = STATUS.WALKING;
         }

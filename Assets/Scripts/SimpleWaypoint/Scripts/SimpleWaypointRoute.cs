@@ -89,7 +89,7 @@ namespace SimpleWaypoint
 			List<SimpleWaypoint> untakenWaypoint = new List<SimpleWaypoint>();
 			foreach (SimpleWaypoint waypoint in waypoints)
 			{
-				if (!waypoint.taken)
+				if (!waypoint.isTaken() && waypoint.isAccessible())
 				{
 					untakenWaypoint.Add(waypoint);
 				}

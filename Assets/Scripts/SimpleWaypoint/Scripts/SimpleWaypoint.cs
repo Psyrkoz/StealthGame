@@ -8,9 +8,10 @@ namespace SimpleWaypoint
     {
         private List<SimpleWaypoint> linkedWaypoints;
 
-        public bool taken = false;
-        public float minWaitTime = 1.0f;
-        public float maxWaitTime = 5.0f;
+        public bool accessible = true;
+        private bool taken = false;
+        public int minWaitTime = 1;
+        public int maxWaitTime = 5;
 
         public void Awake()
         {
@@ -22,7 +23,7 @@ namespace SimpleWaypoint
             List<SimpleWaypoint> possibleWaypoints = new List<SimpleWaypoint>();
             foreach(SimpleWaypoint waypoint in linkedWaypoints)
             {
-                if (!waypoint.taken)
+                if (!waypoint.isTaken() && waypoint.isAccessible())
                 {
                     possibleWaypoints.Add(waypoint);
                 }
@@ -41,6 +42,21 @@ namespace SimpleWaypoint
         public bool removePossibleWaypoint(SimpleWaypoint w)
         {
             return linkedWaypoints.Remove(w);
+        }
+
+        public void setTaken(bool newTaken)
+        {
+            taken = newTaken;
+        }
+
+        public bool isTaken()
+        {
+            return taken;
+        }
+
+        public bool isAccessible()
+        {
+            return accessible;
         }
 
         public void debugLog()

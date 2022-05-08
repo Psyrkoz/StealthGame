@@ -31,6 +31,7 @@ namespace SimpleWaypoint
                         if (previous.Count > 0)
                         {
                             SimpleWaypoint next = previous[Random.Range(0, previous.Count)];
+                            Debug.Log("Previous waypoint is " + next.name);
                             a.setNextWaypoint(next);
                         }
                         else
@@ -66,7 +67,11 @@ namespace SimpleWaypoint
                     {
                         SimpleWaypoint next = nextPossibilities[Random.Range(0, nextPossibilities.Count)];
                         a.setNextWaypoint(next);
-                    }   
+                    }
+                    else
+                    {
+                        Debug.Log("No possible next waypoint for " + a.name);
+                    }
                 }
             }
         }
