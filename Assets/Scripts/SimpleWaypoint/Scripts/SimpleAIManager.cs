@@ -31,7 +31,7 @@ namespace SimpleWaypoint
                     SimpleWaypoint start = a.getRoute().getRandomUntakenStartWaypoint();
                     if(start == null)
                     {
-                        Debug.Log("Not enough start waypoint set... Taking a random accessible waypoint");
+                        Debug.LogWarning("Not enough start waypoint set... Taking a random accessible waypoint");
                         // If none found, just take a random waypoint
                         start = a.getRoute().getRandomUntakenAccessibleWaypoint();
                     }
@@ -49,7 +49,6 @@ namespace SimpleWaypoint
                         if (previous.Count > 0)
                         {
                             SimpleWaypoint next = previous[Random.Range(0, previous.Count)];
-                            Debug.Log("Previous waypoint is " + next.name);
                             a.setNextWaypoint(next);
                         }
                         else
@@ -92,7 +91,7 @@ namespace SimpleWaypoint
                     }
                     else
                     {
-                        Debug.Log("No possible next waypoint for " + a.name);
+                        // Debug.Log("No possible next waypoint for " + a.name);
                     }
                 }
             }
