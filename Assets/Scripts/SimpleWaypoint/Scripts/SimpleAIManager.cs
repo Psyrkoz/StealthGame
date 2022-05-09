@@ -14,6 +14,10 @@ namespace SimpleWaypoint
         // Find all enemies on the map
         private void Start()
         {
+            // Add to a list the taken starting waypoint.
+            // At the end of the start, reset it to untaken.
+            // Just to prevent having 8 differents spawn and 3 AI and all of them spawning at the same place.
+            List<SimpleWaypoint> takenStartingWaypoints = new List<SimpleWaypoint>();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("AI"))
             {
                 SimpleWaypointRoute route = go.GetComponent<SimpleAI>().getRoute();
@@ -22,7 +26,21 @@ namespace SimpleWaypoint
                 {
                     SimpleAI a = go.GetComponent<SimpleAI>();
 
-                    SimpleWaypoint start = a.getRoute().getRandomUntakenWaypoint();
+                    // Start by trying to take a random untaken start waypoint
+                    // Waypoint can be accessible or not
+                    SimpleWaypoint start = a.getRoute().getRandomUntakenStartWaypoint();
+                    if(start == null)
+                    {
+                        Debug.Log("Not enough start waypoint set... Taking a random accessible waypoint");
+                        // If none found, just take a random waypoint
+                        start = a.getRoute().getRandomUntakenAccessibleWaypoint();
+                    }
+                    else
+                    {
+                        start.setTaken(true);
+                        takenStartingWaypoints.Add(start);
+                    }
+                    
                     if(start != null)
                     {
                         a.setPreviousWaypoint(start);
@@ -49,8 +67,12 @@ namespace SimpleWaypoint
                 }
                 else
                 {
-                    Debugger.log("AI isn't on a route", Debugger.LEVEL.ERROR);
+                        Debugger.log("AI isn't on a route", Debugger.LEVEL.ERROR);
                 }
+            }
+            foreach (SimpleWaypoint waypoint in takenStartingWaypoints)
+            {
+                waypoint.setTaken(false);
             }
         }
 

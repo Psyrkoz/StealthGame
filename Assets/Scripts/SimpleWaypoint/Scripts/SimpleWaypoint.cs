@@ -10,7 +10,10 @@ namespace SimpleWaypoint
 
         // TODO: Add a "routeBeginning" boolean value so we can set up a proper spawn point for AI
         //       and not random. Probably also add a "use random spawn point in manager editor" so its still possible
+        public bool startWaypoint = false;
         public bool accessible = true;
+
+        [SerializeField]
         private bool taken = false;
         public int minWaitTime = 1;
         public int maxWaitTime = 5;
@@ -50,15 +53,17 @@ namespace SimpleWaypoint
         {
             taken = newTaken;
         }
-
         public bool isTaken()
         {
             return taken;
         }
-
         public bool isAccessible()
         {
             return accessible;
+        }
+        public bool isStartWaypoint()
+        {
+            return startWaypoint;
         }
 
         public void debugLog()

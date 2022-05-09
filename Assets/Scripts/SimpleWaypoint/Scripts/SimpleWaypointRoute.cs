@@ -78,7 +78,23 @@ namespace SimpleWaypoint
             }
 		}
 
-		public SimpleWaypoint getRandomUntakenWaypoint()
+		public SimpleWaypoint getRandomUntakenStartWaypoint()
+        {
+			List<SimpleWaypoint> untakenStartWaypoint = new List<SimpleWaypoint>();
+			foreach (SimpleWaypoint waypoint in waypoints)
+			{
+				if (!waypoint.isTaken() && waypoint.isStartWaypoint())
+				{
+					untakenStartWaypoint.Add(waypoint);
+				}
+			}
+
+			if (untakenStartWaypoint.Count > 0)
+				return untakenStartWaypoint[Random.Range(0, untakenStartWaypoint.Count)];
+
+			return null;
+		}
+		public SimpleWaypoint getRandomUntakenAccessibleWaypoint()
         {
 			List<SimpleWaypoint> untakenWaypoint = new List<SimpleWaypoint>();
 			foreach (SimpleWaypoint waypoint in waypoints)
