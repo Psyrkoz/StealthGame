@@ -66,7 +66,7 @@ namespace SimpleWaypoint
                 }
                 else
                 {
-                        Debugger.log("AI isn't on a route", Debugger.LEVEL.ERROR);
+                        Debug.LogError("AI isn't on a route");
                 }
             }
             foreach (SimpleWaypoint waypoint in takenStartingWaypoints)
