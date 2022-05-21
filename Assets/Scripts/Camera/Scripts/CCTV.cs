@@ -9,6 +9,8 @@ using UnityEngine;
  *      - Invert rotation
  * */
 
+// TODO: Fix ? :D
+//       Rotation is... yeaa :)))
 namespace CCTV
 {
     public class CCTV : MonoBehaviour
@@ -46,7 +48,7 @@ namespace CCTV
             else
             {
                 float newRotation = Mathf.Lerp(minAngle, maxAngle, timeElapsed / timeToFullAngle) * (invertDirection ? 1 : -1);
-                swivel.transform.rotation = Quaternion.Euler(swivel.transform.eulerAngles.x,
+                swivel.transform.localRotation = Quaternion.Euler(swivel.transform.eulerAngles.x,
                                                                         newRotation,
                                                                         swivel.transform.eulerAngles.z);
             }
