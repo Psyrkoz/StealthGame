@@ -1,16 +1,13 @@
 using UnityEngine;
 
 /***
- *  Class used to move a CCTV (Camera) between a min & max rotation+
+ *  Class used to move a CCTV (Camera) between a min & max rotation
  *  Handle:
  *      - time to travel between min & max angle
  *      - min & max angle
  *      - Pause at min & max angle
  *      - Invert rotation
  * */
-
-// TODO: Fix ? :D
-//       Rotation is... yeaa :)))
 namespace CCTV
 {
     public class CCTV : MonoBehaviour
