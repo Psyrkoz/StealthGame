@@ -11,24 +11,28 @@ namespace SimpleWaypoint
 
     public class SimpleAI : MonoBehaviour
     {
-        private STATUS status = STATUS.READY;
+        private STATUS _status = STATUS.READY;
 
-        private SimpleWaypoint previousWaypoint = null;
-        private SimpleWaypoint currentWaypoint = null;
+        private SimpleWaypoint _previousWaypoint = null;
+        private SimpleWaypoint _currentWaypoint = null;
 
         [SerializeField]
-        private SimpleWaypointRoute route;
+        private SimpleWaypointRoute _route;
 
         private void Update()
         {
             // Need to add a rotation on Y axis
-            if (status == STATUS.WALKING && currentWaypoint != previousWaypoint)
+            if (_status == STATUS.WALKING && _currentWaypoint != _previousWaypoint)
             {
                 // TODO: Move it to somewhere else to not update this value everytime since
                 //       it needs only to be set when start walking.
                 GetComponent<Animator>().SetInteger("Status", 1);
-                transform.LookAt(new Vector3(currentWaypoint.transform.position.x, transform.position.y, currentWaypoint.transform.position.z));
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.transform.position, 1.2f * Time.deltaTime);
+                transform.LookAt(new Vector3(
+                      _currentWaypoint.transform.position.x
+                    , transform.position.y
+                    , _currentWaypoint.transform.position.z
+                ));
+                transform.position = Vector3.MoveTowards(transform.position, _currentWaypoint.transform.position, 1.2f * Time.deltaTime);
             }
         }
         private void OnTriggerEnter(Collider other)
@@ -36,58 +40,59 @@ namespace SimpleWaypoint
             if (other.GetComponent<SimpleWaypoint>())
             {
                 SimpleWaypoint collided = other.GetComponent<SimpleWaypoint>();
-                if(collided == currentWaypoint)
+                if(collided == _currentWaypoint)
                 {
-                    status = STATUS.IDLE;
+                    _status = STATUS.IDLE;
                     GetComponent<Animator>().SetInteger("Status", 0);
-                    StartCoroutine(doIdleTime(Random.Range(collided.minWaitTime, collided.maxWaitTime)));
+                    StartCoroutine(doIdleTime(Random.Range(collided._minWaitTime, collided._maxWaitTime)));
                 }
             }
         }  
         private IEnumerator doIdleTime(float waitTime)
         {
             yield return new WaitForSeconds(waitTime);
-            status = STATUS.READY;
+            _status = STATUS.READY;
         }
 
         public STATUS getStatus()
         {
-            return status;
+            return _status;
         }
         public SimpleWaypointRoute getRoute()
         {
-            return route;
+            return _route;
         }
        
         public void setRoute(SimpleWaypointRoute newRoute)
         {
-            route = newRoute;
+            _route = newRoute;
         }
         public void setNextWaypoint(SimpleWaypoint nextWaypoint)
         {
-            if (currentWaypoint != null)
+            if (_currentWaypoint != null)
             {
-                previousWaypoint = currentWaypoint;
-                previousWaypoint.setTaken(false);
+                _previousWaypoint = _currentWaypoint;
+                _previousWaypoint.setTaken(false);
             }
 
-            currentWaypoint = nextWaypoint;
-            currentWaypoint.setTaken(true);
+            _currentWaypoint = nextWaypoint;
+            _currentWaypoint.setTaken(true);
 
-            status = STATUS.WALKING;
+            _status = STATUS.WALKING;
         }
         public void setPreviousWaypoint(SimpleWaypoint waypoint)
         {
-            previousWaypoint = waypoint;
+            _previousWaypoint = waypoint;
         }
 
         public SimpleWaypoint getCurrentWaypoint()
         {
-            return currentWaypoint;
+            return _currentWaypoint;
         }
+
         public SimpleWaypoint getPreviousWaypoint()
         {
-            return previousWaypoint;
+            return _previousWaypoint;
         }
     }
 }

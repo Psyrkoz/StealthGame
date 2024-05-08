@@ -8,15 +8,15 @@ namespace SimpleWaypoint
     {
         private List<SimpleWaypoint> linkedWaypoints;
 
-        // TODO: Add a "routeBeginning" boolean value so we can set up a proper spawn point for AI
+        // TODO: Add a "routeBeginning" boolean value so we can set up a proper spawn point for _AI
         //       and not random. Probably also add a "use random spawn point in manager editor" so its still possible
-        public bool startWaypoint = false;
-        public bool accessible = true;
+        public bool _startWaypoint = false;
+        public bool _accessible = true;
 
         [SerializeField]
-        private bool taken = false;
-        public int minWaitTime = 1;
-        public int maxWaitTime = 5;
+        private bool _taken = false;
+        public int _minWaitTime = 1;
+        public int _maxWaitTime = 5;
 
         public void Awake()
         {
@@ -51,19 +51,21 @@ namespace SimpleWaypoint
 
         public void setTaken(bool newTaken)
         {
-            taken = newTaken;
+            _taken = newTaken;
         }
         public bool isTaken()
         {
-            return taken;
+            return _taken;
         }
+        
         public bool isAccessible()
         {
-            return accessible;
+            return _accessible;
         }
+
         public bool isStartWaypoint()
         {
-            return startWaypoint;
+            return _startWaypoint;
         }
 
         public void debugLog()

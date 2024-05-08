@@ -6,17 +6,17 @@ namespace SimpleWaypoint
 {
     public class SimpleAIManager : MonoBehaviour
     {
-        private List<SimpleAI> AI = new List<SimpleAI>();
+        private List<SimpleAI> _AI = new List<SimpleAI>();
 
         [SerializeField]
-        private SimpleAI prefab;
+        private SimpleAI _prefab;
 
         // Find all enemies on the map
         private void Start()
         {
-            // Add to a list the taken starting waypoint.
+            // Add to a list the _taken starting waypoint.
             // At the end of the start, reset it to untaken.
-            // Just to prevent having 8 differents spawn and 3 AI and all of them spawning at the same place.
+            // Just to prevent having 8 differents spawn and 3 _AI and all of them spawning at the same place.
             List<SimpleWaypoint> takenStartingWaypoints = new List<SimpleWaypoint>();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("AI"))
             {
@@ -27,11 +27,11 @@ namespace SimpleWaypoint
                     SimpleAI a = go.GetComponent<SimpleAI>();
 
                     // Start by trying to take a random untaken start waypoint
-                    // Waypoint can be accessible or not
+                    // Waypoint can be _accessible or not
                     SimpleWaypoint start = a.getRoute().getRandomUntakenStartWaypoint();
                     if(start == null)
                     {
-                        Debug.LogWarning("Not enough start waypoint set... Taking a random accessible waypoint");
+                        Debug.LogWarning("Not enough start waypoint set... Taking a random _accessible waypoint");
                         // If none found, just take a random waypoint
                         start = a.getRoute().getRandomUntakenAccessibleWaypoint();
                     }
@@ -57,7 +57,7 @@ namespace SimpleWaypoint
                         }
                         
                         a.transform.position = start.transform.position;
-                        AI.Add(a);
+                        _AI.Add(a);
                     }
                     else
                     {
@@ -66,7 +66,7 @@ namespace SimpleWaypoint
                 }
                 else
                 {
-                        Debug.LogError("AI isn't on a route");
+                        Debug.LogError("AI isn't on a _route");
                 }
             }
             foreach (SimpleWaypoint waypoint in takenStartingWaypoints)
@@ -75,11 +75,11 @@ namespace SimpleWaypoint
             }
         }
 
-        // This function will check wether an AI is on a finishing point or not.
+        // This function will check wether an _AI is on a finishing point or not.
         // On a finish point, it will take a new random point and walk to it
         void Update()
         {
-            foreach (SimpleAI a in AI)
+            foreach (SimpleAI a in _AI)
             {
                 if (a.getStatus() == STATUS.READY)
                 {
@@ -99,7 +99,7 @@ namespace SimpleWaypoint
 
         public SimpleAI getPrefab()
         {
-            return prefab;
+            return _prefab;
         }
     }
 

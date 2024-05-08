@@ -40,7 +40,7 @@ namespace SimpleWaypoint
                     gameObject.transform.localPosition = Vector3.zero;
 
                     SimpleWaypointRoute route = gameObject.AddComponent<SimpleWaypointRoute>();
-                    route.color = waypoint.GetComponent<Renderer>().sharedMaterial.color;
+                    route._color = waypoint.GetComponent<Renderer>().sharedMaterial.color;
                 }
             }
         }

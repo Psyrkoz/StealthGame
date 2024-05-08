@@ -14,11 +14,11 @@ namespace SimpleWaypoint
 			SimpleWaypointRoute route = target as SimpleWaypointRoute;
 			SimpleWaypoint[] waypoints = (target as SimpleWaypointRoute).GetComponentsInChildren<SimpleWaypoint>();
 
-			if (GUILayout.Button("Set new color"))
+			if (GUILayout.Button("Set new _color"))
             {
 				Shader shader = Shader.Find("Universal Render Pipeline/Simple Lit");
 				Material mat = new Material(shader);
-				mat.color = route.color;
+				mat.color = route._color;
 
 				foreach (SimpleWaypoint waypoint in waypoints)
 				{
@@ -31,7 +31,7 @@ namespace SimpleWaypoint
 			{
 				Shader shader = Shader.Find("Universal Render Pipeline/Simple Lit");
 				Material mat = new Material(shader);
-				mat.color = route.color;
+				mat.color = route._color;
 
 				GameObject waypoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 				waypoint.transform.SetParent(route.transform);

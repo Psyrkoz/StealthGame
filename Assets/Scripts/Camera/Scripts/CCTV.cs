@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /***
@@ -13,41 +14,42 @@ namespace CCTV
     public class CCTV : MonoBehaviour
     {
         [SerializeField]
-        GameObject swivel;
+        GameObject _swivel;
 
         [SerializeField]
-        private float minAngle = -90;
+        private float _minAngle = -90;
         [SerializeField]
-        private float maxAngle = 90;
+        private float _maxAngle = 90;
         [SerializeField]
-        private float timeToFullAngle = 10.0f;
+        private float _timeToFullAngle = 10.0f;
         [SerializeField]
-        private float pauseAtMinMaxAngle = 1.0f;
+        private float _pauseAtMinMaxAngle = 1.0f;
         [SerializeField]
-        private bool invertDirection = false;
+        private bool _invertDirection = false;
 
-        private float timeElapsed = 0.0f;
+        private float _timeElapsed = 0.0f;
 
         private void Update()
         {
-            timeElapsed += Time.deltaTime;
+            _timeElapsed += Time.deltaTime;
 
-            bool waiting = timeElapsed > timeToFullAngle;
+            bool waiting = _timeElapsed > _timeToFullAngle;
             if (waiting)
             {
-                waiting = (timeElapsed < (timeToFullAngle + pauseAtMinMaxAngle));
+                waiting = (_timeElapsed < (_timeToFullAngle + _pauseAtMinMaxAngle));
                 if (!waiting)
                 {
-                    timeElapsed = 0.0f;
-                    invertDirection = !invertDirection;
+                    _timeElapsed = 0.0f;
+                    _invertDirection = !_invertDirection;
                 }
             }
             else
             {
-                float newRotation = Mathf.Lerp(minAngle, maxAngle, timeElapsed / timeToFullAngle) * (invertDirection ? 1 : -1);
-                swivel.transform.localRotation = Quaternion.Euler(swivel.transform.eulerAngles.x,
-                                                                        newRotation,
-                                                                        swivel.transform.eulerAngles.z);
+                _swivel.transform.localRotation = Quaternion.Euler(
+                      _swivel.transform.eulerAngles.x
+                    , Mathf.Lerp(_minAngle, _maxAngle, _timeElapsed / _timeToFullAngle) * (_invertDirection ? 1 : -1)
+                    , _swivel.transform.eulerAngles.z
+                );
             }
         }
     }

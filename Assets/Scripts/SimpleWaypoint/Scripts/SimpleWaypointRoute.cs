@@ -1,25 +1,25 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace SimpleWaypoint
 {
-	// AI will use this class to travel trough the level
-	public class SimpleWaypointRoute : MonoBehaviour
+    // _AI will use this class to travel trough the level
+    public class SimpleWaypointRoute : MonoBehaviour
 	{
 		#region VARIABLE DECLARATION
 
-		public Color color;
+		public Color _color;
 
 		[SerializeField]
-		private bool isCircular;
-		private List<SimpleWaypoint> waypoints = new List<SimpleWaypoint>();
+		private bool _isCircular;
+		private List<SimpleWaypoint> _waypoints = new List<SimpleWaypoint>();
 
 		#endregion
 
 		public void Awake()
 		{
-			waypoints.Clear();
-			loadRoute(waypoints);
+			_waypoints.Clear();
+			loadRoute(_waypoints);
 		}
 
 		private void loadRoute(List<SimpleWaypoint> waypoints, SimpleWaypoint parent = null)
@@ -38,8 +38,10 @@ namespace SimpleWaypoint
 					waypoint.addPossibleWaypoints(parent);
 					parent.addPossibleWaypoints(waypoint);
 
-					if(!waypoints.Contains(parent))
-						waypoints.Add(parent);
+                    if(!waypoints.Contains(parent))
+                    {
+                        waypoints.Add(parent);
+                    }
                 }
 
 				// Add previous and following child to path
@@ -54,18 +56,20 @@ namespace SimpleWaypoint
 					waypoint.addPossibleWaypoints(possibility);
 				}
 
-				// For each sub route, add first element
+				// For each sub _route, add first element
 				for(int j = 0; j < waypoint.transform.childCount; j++)
                 {
 					SimpleWaypointRoute route = waypoint.transform.GetChild(j).GetComponent<SimpleWaypointRoute>();
 					route.loadRoute(waypoints, waypoint);
                 }
 
-				if(!waypoints.Contains(waypoint))
-					waypoints.Add(waypoint);
+                if (!waypoints.Contains(waypoint))
+                {
+                    waypoints.Add(waypoint);
+                }
 			}
 
-			if(isCircular)
+			if(_isCircular)
             {
 				if (parent == null)
 				{
@@ -81,7 +85,7 @@ namespace SimpleWaypoint
 		public SimpleWaypoint getRandomUntakenStartWaypoint()
         {
 			List<SimpleWaypoint> untakenStartWaypoint = new List<SimpleWaypoint>();
-			foreach (SimpleWaypoint waypoint in waypoints)
+			foreach (SimpleWaypoint waypoint in _waypoints)
 			{
 				if (!waypoint.isTaken() && waypoint.isStartWaypoint())
 				{
@@ -89,15 +93,18 @@ namespace SimpleWaypoint
 				}
 			}
 
-			if (untakenStartWaypoint.Count > 0)
-				return untakenStartWaypoint[Random.Range(0, untakenStartWaypoint.Count)];
+            if (untakenStartWaypoint.Count > 0)
+            {
+                return untakenStartWaypoint[Random.Range(0, untakenStartWaypoint.Count)];
+            }
 
 			return null;
 		}
+
 		public SimpleWaypoint getRandomUntakenAccessibleWaypoint()
         {
 			List<SimpleWaypoint> untakenWaypoint = new List<SimpleWaypoint>();
-			foreach (SimpleWaypoint waypoint in waypoints)
+			foreach (SimpleWaypoint waypoint in _waypoints)
 			{
 				if (!waypoint.isTaken() && waypoint.isAccessible())
 				{
@@ -110,10 +117,11 @@ namespace SimpleWaypoint
 
 			return null;
         }
+
 		// Used for editor only
 		void OnDrawGizmos ()
 		{
-			// For some reasons, have to reverse the loop so in a non circular route, 
+			// For some reasons, have to reverse the loop so in a non circular _route, 
 			// the last waypoint is the farthest from beginning and not the closest
 			List<SimpleWaypoint> waypoints = new List<SimpleWaypoint>();
 			for(int i = transform.childCount - 1; i >= 0 ; i--)
@@ -121,13 +129,15 @@ namespace SimpleWaypoint
 				waypoints.Add(transform.GetChild(i).GetComponent<SimpleWaypoint>());
             }
 
-			// If the route parent is a SimpleWaypoint, add it to the route
-			if(transform.parent.GetComponent<SimpleWaypoint>() != null)
-				waypoints.Add(transform.parent.GetComponent<SimpleWaypoint>());
+            // If the _route parent is a SimpleWaypoint, add it to the _route
+            if (transform.parent.GetComponent<SimpleWaypoint>() != null)
+            {
+                waypoints.Add(transform.parent.GetComponent<SimpleWaypoint>());
+            }
 
 
 			SimpleWaypointManager manager = FindObjectOfType<SimpleWaypointManager>();
-			Gizmos.color = new Color(color.r, color.g, color.b); // Mandatory to use new Color(r, g, b) since a is at 0
+			Gizmos.color = new Color(_color.r, _color.g, _color.b); // Mandatory to use new Color(r, g, b) since a is at 0
 			if (manager != null && manager.drawGizmos && waypoints.Count > 1)
             {
 				for (int i = 0; i < waypoints.Count - 1; i++)
@@ -136,7 +146,7 @@ namespace SimpleWaypoint
 				}
 
 				// Closing the circuit
-				if (isCircular)
+				if (_isCircular)
 				{
 					Gizmos.DrawLine(waypoints[waypoints.Count - 1].transform.position, waypoints[0].transform.position);
 				}
